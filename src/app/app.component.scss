@@ -2,3 +2,26 @@ mat-card {
   width: 20rem;
   background-color: gray;
 }
+
+mat-grid-tile {
+  border: 2px solid lightgrey;
+}
+
+.internal-grid {
+  min-width: 100%;
+}
+
+.shopping-card {
+  height:90%;
+}
+
+.example-viewport {
+  text-align: center;
+  height: 325px;
+  width: 100%;
+  border: 1px solid black;
+}
+
+.example-item {
+  height: 50px;
+}

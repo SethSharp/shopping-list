@@ -16,7 +16,18 @@ export class MongooseService {
     return this.http.get(`${this.uri}/getItems`);
   }
 
-  addItemToInventory(title:any, quantity:any) {
-    return this.http.post(`${this.uri}/addInventory`,{title:title,quantity:quantity})
+  getAllInventory() {
+    return this.http.get(`${this.uri}/getInventory`);
+  }
+
+  getAllRecipes() {
+    return this.http.get(`${this.uri}/getRecipes`)
+  }
+
+  addItemToInventory(title: any, quantity: any) {
+    return this.http.post(`${this.uri}/addInventory`, {
+      title: title,
+      quantity: quantity,
+    });
   }
 }

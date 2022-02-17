@@ -1,113 +1,158 @@
-<mat-card>
-  <mat-card-title> Create Item </mat-card-title>
-  <mat-card-content>
-    <form [formGroup]="checkoutForm" (ngSubmit)="submitItem()">
-      <mat-form-field>
-        <mat-label> Item name</mat-label>
-        <input matInput id="item" formControlName="item" placeholder="Eggs" autocomplete="off">
-      </mat-form-field>
-      <button mat-button type="submit" value="submit"> Submit </button>
-    </form>
-  </mat-card-content>
-</mat-card>
-
 <br>
+<mat-grid-list cols="3" rowHeight="1:2">
+  <mat-grid-tile>
+    <div class="internal-grid">
+      <mat-grid-list cols="1" rowHeight="2:1">
+        <mat-grid-tile [rowspan]="1">
+          <!-- CREATE ITEM -->
+          <mat-card>
+            <mat-card-title> Create Item </mat-card-title>
+            <mat-card-content>
+              <form [formGroup]="checkoutForm" (ngSubmit)="submitItem()">
+                <mat-form-field>
+                  <mat-label> Item name</mat-label>
+                  <input matInput id="item" formControlName="item" placeholder="Eggs" autocomplete="off">
+                </mat-form-field>
+                <button mat-button type="submit" value="submit"> Submit </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
 
-<mat-card>
-  <mat-card-title> Create recipe </mat-card-title>
-  <mat-card-content>
-    <form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
-      <mat-form-field>
-        <mat-label> Recipe title </mat-label>
-        <input matInput id="title" formControlName="title" placeholder="Spag bog" autocomplete="off">
-        <br>
-      </mat-form-field>
-      <div *ngFor="let item of recipeSchema.items | keyvalue">
-        <h3> {{item.key}}:  {{item.value}} </h3>
-      </div>
-      <br>
-      <form [formGroup]="recipeItemForm" (ngSubmit)="submitRecipeItem()">
-        <mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [rowspan]="2">
+          <!-- CREATE RECIPE -->
+          <mat-card>
+            <mat-card-title> Create recipe </mat-card-title>
+            <mat-card-content>
+              <form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
+                <mat-form-field>
+                  <mat-label> Recipe title </mat-label>
+                  <input matInput id="title" formControlName="title" placeholder="Spag bog" autocomplete="off">
+                  <br>
+                </mat-form-field>
+                <div *ngFor="let item of recipeSchema.items | keyvalue">
+                  <h3> {{item.key}}:  {{item.value}} </h3>
+                </div>
+                <br>
+                <form [formGroup]="recipeItemForm" (ngSubmit)="submitRecipeItem()">
+                  <mat-form-field>
 
-          <mat-label>Favorite food</mat-label>
-          <mat-select formControlName="title">
-            <mat-option *ngFor="let item of items" [value]="item.item" >
-              {{item.item}}
-            </mat-option>
-          </mat-select>
+                    <mat-label> Food item </mat-label>
+                    <mat-select formControlName="title">
+                      <mat-option *ngFor="let item of items" [value]="item.item" >
+                        {{item.item}}
+                      </mat-option>
+                    </mat-select>
 
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label> Quantity </mat-label>
-          <input matInput type="number" id="quantity" formControlName="quantity" autocomplete="off">
-        </mat-form-field>
-        <br>
-        <button mat-button type="submit" value="submit"> Add item </button>
-      </form>
-      <br>
-      <button mat-button type="submit" value="submit"> Make new recipe </button>
-    </form>
-  </mat-card-content>
-</mat-card>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label> Quantity </mat-label>
+                    <input matInput type="number" id="quantity" formControlName="quantity" autocomplete="off">
+                  </mat-form-field>
+                  <br>
+                  <button mat-button type="submit" value="submit"> Add item </button>
+                </form>
+                <br>
+                <button mat-button type="submit" value="submit"> Make new recipe </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title> Add to inventory </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="inventoryForm" (ngSubmit)="submitItemToInventory()">
-      <mat-form-field>
-        <mat-label> Title </mat-label>
-        <input matInput type="text" id="title" formControlName="title" autocomplete="off">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label> Quantity </mat-label>
-        <input matInput type="number" id="quantity" formControlName="quantity" autocomplete="off">
-      </mat-form-field>
-      <button mat-button type="submit" value="submit"> Add to inventory </button>
-    </form>
-  </mat-card-content>
-</mat-card>
-
-<br>
-<br>
-
-<mat-card>
-  <mat-card-title> Shopping list </mat-card-title>
-  <mat-card-content>
-    <div *ngFor="let recipient of shoppingList | keyvalue" >
-      <mat-label> {{recipient.key}}:  {{recipient.value}} </mat-label>
+        </mat-grid-tile>
+        <mat-grid-tile [rowspan]="1">
+          <!-- ADD TO INVENTORY -->
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title> Add to inventory </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="inventoryForm" (ngSubmit)="submitItemToInventory()">
+                <mat-form-field>
+                  <mat-label> Title </mat-label>
+                  <mat-select formControlName="title">
+                    <mat-option *ngFor="let item of items" [value]="item.item" >
+                      {{item.item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label> Quantity </mat-label>
+                  <input matInput type="number" id="quantity" formControlName="quantity" autocomplete="off">
+                </mat-form-field>
+                <button mat-button type="submit" value="submit"> Add to inventory </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
-  </mat-card-content>
-  <button mat-button (onClick)="calculateShoppingList()"> Calculate shopping list</button>
-</mat-card>
-
-<br>
-<br>
-
-<!-- Will need to add a feature to possibly edit... -->
-<mat-card>
-  <mat-card-header>
-    <mat-card-title> Inventory </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div *ngFor="let recipient of inventory | keyvalue" >
-      <mat-label> {{recipient.key}}:  {{recipient.value}} </mat-label>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="internal-grid">
+      <mat-grid-list cols="1" rowHeight="2:1">
+        <mat-grid-tile [rowspan]="2">
+          <!-- SELECT FOOD -->
+          <mat-card class="shopping-card">
+            <mat-card-header>
+              <mat-card-title> Select Recipe </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+                <div *cdkVirtualFor="let recipe of recipes; let i = index" class="example-item">
+                  <mat-checkbox (change)="saveRecipes(i,$event.checked)"> {{recipe.title}} </mat-checkbox>
+                </div>
+              </cdk-virtual-scroll-viewport>
+            </mat-card-content>
+            <!-- <mat-card-footer>
+              <button mat-button (onClick)="saveRecipes()" > Save </button>
+            </mat-card-footer> -->
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [rowspan]="2">
+          <!-- INVENTORY -->
+          <!-- Will need to add a feature to possibly edit (When items are used) -->
+          <mat-card class="shopping-card">
+            <mat-card-header>
+              <mat-card-title> Inventory </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+                <div *cdkVirtualFor="let item of inventory | keyvalue" class="example-item">
+                  <mat-label> {{item.key}}:  {{item.value}} </mat-label>
+                </div>
+              </cdk-virtual-scroll-viewport>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
-  </mat-card-content>
-</mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile class="shopping-grid">
+    <div class="internal-grid">
+      <mat-grid-list cols="1" rowHeight="2:1">
+        <mat-grid-tile [rowspan]="4" >
+          <!-- SHOPPING LIST -->
+          <mat-card class="shopping-card">
+            <mat-card-title> Shopping list </mat-card-title>
+            <mat-card-content>
+              <div *ngFor="let recipient of shoppingList | keyvalue" >
+
+              </div>
+              <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+                <div *cdkVirtualFor="let listItem of shoppingList | keyvalue" class="example-item">
+                  <mat-label> {{listItem.key}}:  {{listItem.value}} </mat-label>
+                </div>
+              </cdk-virtual-scroll-viewport>
+              <br>
+              <button mat-raised-button (click)="calculateShoppingList()" color="accent">
+                Calculate Shopping List
+              </button>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
 
 <br>
-<br>
-
-<!-- Displays all recipes -->
-<mat-card>
-  <mat-card-header>
-    <mat-card-title> Select food </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <section *ngFor="let recipe of recipes">
-      <mat-checkbox> {{recipe}} </mat-checkbox>
-    </section>
-  </mat-card-content>
-</mat-card>

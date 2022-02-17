@@ -23,7 +23,7 @@ db.on("error", (err) => console.log(err));
 db.once("open", () => console.log("Connnected to database"));
 
 let itemSchema = {
-  items:String
+  item:String
 };
 const Item = mongoose.model("items", itemSchema);
 
@@ -83,12 +83,7 @@ app.get("/shoppingList", (req, res) => {
 })
 
 app.post("/createItem", (req, res) => {
-  newItem = new Item(req.body);
-  newItem.save().then((item) => {
-    // console.log(item, " added Successfully")
-    res.json(item);
-  })
-  .catch((err) => console.log(err));
+  newItem.save().then((item) => {res.json(item);}).catch((err) => console.log(err));
 });
 
 app.post("/createRecipe", (req, res) => {
@@ -96,7 +91,7 @@ app.post("/createRecipe", (req, res) => {
   newRecipe
     .save()
     .then((recipe) => {
-      // console.log(recipe, " created successfully")
+      console.log(recipe, " created successfully")
       res.json(recipe);
     })
     .catch((err) => console.log(err));
