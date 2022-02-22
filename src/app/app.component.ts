@@ -1,3 +1,4 @@
+import { FilterItemsPipe } from './filter-items.pipe';
 import { Component } from '@angular/core';
 import { Form, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +8,14 @@ import { MongooseService } from './services/mongoose.service';
 export interface Recipes {
   name: string;
   requested: boolean;
+}
+export interface Item {
+  item: string
+}
+
+export interface Inventory {
+  item: string,
+  quantity: number
 }
 
 @Component({
@@ -24,8 +33,8 @@ export class AppComponent {
     private mongoose: MongooseService
   ) {}
   ngOnInit(): void {
-    this.mongoose.getAllItems().subscribe((items) => {
-      this.items = items;
+    this.mongoose.getAllItems().subscribe((items:any) => {
+      this.items = this.convertMongooseItems(items);
     });
     this.mongoose.getAllInventory().subscribe((inventoryArray:any) => {
       let inventoryMap = new Map()
@@ -33,23 +42,29 @@ export class AppComponent {
         inventoryMap.set(item.title, item.quantity)
       }
       this.inventory = inventoryMap
+      console.log(this.inventory);
     })
     this.mongoose.getAllRecipes().subscribe((recipeItems) => {
       this.recipes = recipeItems
-      console.log(this.recipes)
     })
+  }
+
+  convertMongooseItems(items:any[]):Item[] {
+    let newItems: Item[]=items.map((item) => item.item)
+    return newItems
   }
 
   uri = 'http://localhost:4000';
   table = 'items';
+  search=""
 
   // Holds local mongoose data
-  items: any;
+  items: any=[];
   shoppingList: any;
-  inventory:any;
+  inventory = new Map();
   recipes:any;
 
-  checkoutForm = this.formBuilder.group({
+  itemForm = this.formBuilder.group({
     item: '',
   });
 
@@ -76,12 +91,15 @@ export class AppComponent {
 
   submitItem(): any {
     // Process checkout data here
-    this.http
-      .post(`${this.uri}/createItem`, {
-        item: this.checkoutForm.controls['item'].value,
+    let newItem = this.itemForm.controls['item'].value;
+    let itemExists = this.items.filter((it: string) => it == newItem);
+    if (itemExists.length==1){alert("Item exists");return}
+    this.http.post(`${this.uri}/createItem`, {
+        item: newItem,
       })
-      .subscribe((itemData) => {
-        console.log (itemData)
+      .subscribe((item: any) => {
+        this.items = [...this.items, item.item];
+        this.itemForm.reset();
       });
   }
 
@@ -90,9 +108,9 @@ export class AppComponent {
       this.recipeItemForm.controls['title'].value,
       this.recipeItemForm.controls['quantity'].value
     );
-    console.log(this.recipeSchema);
     this.recipeItemForm.reset();
   }
+
   submitRecipe() {
     this.recipeSchema.title = this.recipeForm.controls['title'].value;
     // TS cannot be used directly inside a http post body
@@ -114,27 +132,26 @@ export class AppComponent {
 
 
   submitItemToInventory() {
-    if (this.itemInInventory(this.inventoryForm.controls["title"].value)) {
+    let item = this.inventoryForm.controls['title'].value;
+    let quantity = this.inventoryForm.controls["quantity"].value
+    if (this.itemInInventory(item)) {
+      let oldAmount = this.inventory.get(item)
+      this.mongoose.updateItemQuantity(item, quantity, oldAmount).subscribe((x:any)=> {
+        if (x) {
+
+          this.inventory.set(item, oldAmount+quantity)
+        }
+      })
       return
     }
-    this.mongoose.addItemToInventory(
-      this.inventoryForm.controls["title"].value,
-      this.inventoryForm.controls["quantity"].value
-      ).subscribe((item:any) => {
-        console.log("...did add")
-        this.inventory = [...this.inventory, {title:item.title, quantity:item.quantity}];
-
-    })
+    this.mongoose.addItemToInventory(item,quantity).subscribe((item:any) => {
+        this.inventory.set(item.title, item.quantity)
+        this.inventoryForm.reset()
+      })
   }
 
   itemInInventory(itemTitle:string) : Boolean{
-    console.log(this.inventory)
-    for (let item of this.inventory) {
-      console.log(item.title)
-      if (item.title == itemTitle) {
-        return true;
-      }
-    }
+    return  this.inventory.get(itemTitle)
     return false
   }
 
@@ -175,12 +192,19 @@ export class AppComponent {
       //let item of recipe.items
       for(let item of r.items) {
         for (const [key, value] of Object.entries(item)) {
+          if (savedRecipeItems.has(key)) {
+            // then we need even more of said item(key)
+            console.log('Hmm yes');
+            let pAmount = savedRecipeItems.get(key);
+            let newAmount = pAmount + value;
+            savedRecipeItems.set(key, newAmount);
+            continue;
+          }
           savedRecipeItems.set(key, value)
         }
       }
     }
 
-    let copyInventory = [...this.inventory];
     let temporaryShoppingList = new Map()
     for (let [key, value] of savedRecipeItems) {
       // go through each item and see if there is enoguh in our invenogtry
@@ -188,14 +212,6 @@ export class AppComponent {
       let nAmount = savedRecipeItems.get(key)
       if (cAmount < nAmount) {
         let amount = nAmount-cAmount
-        if (temporaryShoppingList.has(key)) {
-          // then we need even more of said item(key)
-          let pAmount = temporaryShoppingList.get(key)
-          let newAmount = pAmount + amount
-          temporaryShoppingList.set(key, newAmount)
-          continue;
-        }
-        // otherwise, we just need to set the item value
         temporaryShoppingList.set(key, amount)
       }
     }
@@ -204,5 +220,13 @@ export class AppComponent {
       this.shoppingList=temporaryShoppingList
     }
 
+  }
+
+  isChecked = false
+  isCheckedName = ""
+  handleItemCheckbox(event:any) {
+    this.isChecked = !this.isChecked;
+    this.isCheckedName = event.target.name;
+    console.log(this.isCheckedName)
   }
 }

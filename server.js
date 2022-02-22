@@ -83,6 +83,7 @@ app.get("/shoppingList", (req, res) => {
 })
 
 app.post("/createItem", (req, res) => {
+  newItem = new Item(req.body)
   newItem.save().then((item) => {res.json(item);}).catch((err) => console.log(err));
 });
 
@@ -106,6 +107,18 @@ app.post("/addInventory", (req, res) => {
 
 app.post("/addShoppingList", (req, res) => {
 
+})
+
+app.post("/updateInventoryItem", (req, res) => {
+  t = req.body.title
+  q = req.body.quantity
+  o = req.body.oldAmount
+  Inventory.updateOne({title:t},{
+    quantity: (q+o)
+  }, (err, item) => {
+    if (err) {req.json(false);return err;}
+    res.json(true)
+  })
 })
 
 app.listen(port, () => {

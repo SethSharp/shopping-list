@@ -1,3 +1,8 @@
+
+html {
+  background-color: darkgrey;
+}
+
 mat-card {
   width: 20rem;
   background-color: gray;
@@ -15,13 +20,34 @@ mat-grid-tile {
   height:90%;
 }
 
-.example-viewport {
-  text-align: center;
+.std-viewport {
   height: 325px;
   width: 100%;
-  border: 1px solid black;
+}
+
+.center-viewport {
+  text-align: center;
 }
 
 .example-item {
   height: 50px;
+}
+
+// Create recipe
+.search-recipe-item {
+  width: 100%;
+  padding: 5px;
+}
+
+.recipe-item-list {
+  padding: 5px 0 0px 23%;
+}
+
+.item-viewport {
+  height: 100px;
+}
+
+
+#recipe-item-check {
+  height: 35px;
 }

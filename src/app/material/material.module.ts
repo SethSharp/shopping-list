@@ -6,6 +6,7 @@ import { MatSelectModule } from "@angular/material/select"
 import { MatCheckboxModule } from "@angular/material/checkbox"
 import { MatGridListModule } from "@angular/material/grid-list"
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,6 +23,7 @@ import { CommonModule } from '@angular/common';
     MatCheckboxModule,
     MatGridListModule,
     ScrollingModule,
+    MatExpansionModule
   ],
 })
 export class MaterialModule {}
