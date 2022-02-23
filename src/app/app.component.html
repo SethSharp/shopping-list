@@ -53,6 +53,7 @@
                               type="checkbox"
                               [value]="item"
                               [name]="item"
+                              [checked]="isChecked"
                               (change)="handleItemCheckbox($event)"
                               [disabled]="isChecked && (isCheckedName!=item)">
                               {{item}}

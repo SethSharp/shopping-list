@@ -30,7 +30,7 @@ const Item = mongoose.model("items", itemSchema);
 // A single recipe
 let recipeSchema = {
   title: String,
-  items: Array // map now into a object, holding the item, with quantity as value
+  items: Object // map now into a object, holding the item, with quantity as value
 };
 const Recipe = mongoose.model("recipes", recipeSchema)
 
